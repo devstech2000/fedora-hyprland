@@ -218,3 +218,29 @@ for desktop_file in "$REPO_DIR"/applications/*.desktop; do
         "$desktop_file" \
         "$APPLICATION_DIR/$(basename "$desktop_file")"
 done
+
+echo
+echo "==> Configuring user services..."
+
+USER_SYSTEMD_DIR="$HOME/.config/systemd/user"
+
+mkdir -p "$USER_SYSTEMD_DIR"
+
+install -m 0644 \
+    "$REPO_DIR/systemd/user/quickshell.service" \
+    "$USER_SYSTEMD_DIR/quickshell.service"
+
+systemctl --user daemon-reload
+
+USER_SERVICES=(
+    hypridle.service
+    hyprpaper.service
+    hyprpolkitagent.service
+    mako.service
+    quickshell.service
+)
+
+for service in "${USER_SERVICES[@]}"; do
+    echo "Enabling user service: $service"
+    systemctl --user enable "$service"
+done
