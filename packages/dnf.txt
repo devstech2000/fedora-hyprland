@@ -21,6 +21,7 @@ rofi
 mako
 yazi
 btop
+libcap
 cascadia-mono-nf-fonts
 
 # Screenshot workflow
