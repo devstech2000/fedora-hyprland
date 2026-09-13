@@ -41,6 +41,10 @@ qt6-qtdeclarative-devel
 ripgrep
 fd-find
 
+# Boot splash
+plymouth-scripts
+plymouth-plugin-two-step
+
 # Power management
 power-profiles-daemon
 
