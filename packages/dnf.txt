@@ -22,6 +22,7 @@ mako
 yazi
 btop
 libcap
+xdg-utils
 cascadia-mono-nf-fonts
 
 # Screenshot workflow
