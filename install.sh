@@ -46,6 +46,38 @@ REPO_DIR="$(
     pwd
 )"
 
+REQUIRED_FILES=(
+    packages/copr.txt
+    packages/dnf.txt
+    packages/flatpak.txt
+    packages/satty.txt
+    packages/stylua.txt
+    assets/wallpaper.txt
+    assets/plymouth/catppuccin-macchiato/catppuccin-macchiato.plymouth
+    systemd/user/quickshell.service
+    systemd/system/getty@tty1.service.d/override.conf.template
+)
+
+REQUIRED_DIRS=(
+    config
+    applications
+    assets/plymouth/catppuccin-macchiato
+)
+
+for file in "${REQUIRED_FILES[@]}"; do
+    if [[ ! -f "$REPO_DIR/$file" || ! -r "$REPO_DIR/$file" ]]; then
+        echo "Error: Required repository file is missing or unreadable: $file" >&2
+        exit 1
+    fi
+done
+
+for dir in "${REQUIRED_DIRS[@]}"; do
+    if [[ ! -d "$REPO_DIR/$dir" || ! -r "$REPO_DIR/$dir" || ! -x "$REPO_DIR/$dir" ]]; then
+        echo "Error: Required repository directory is missing or unreadable: $dir" >&2
+        exit 1
+    fi
+done
+
 echo "Fedora 44 detected."
 echo "Repository: $REPO_DIR"
 echo "User: $INSTALL_USER"
