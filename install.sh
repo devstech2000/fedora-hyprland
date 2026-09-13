@@ -372,3 +372,13 @@ else
     echo "Setting Yazi as the default directory handler..."
     xdg-mime default yazi.desktop inode/directory
 fi
+
+echo
+echo "==> Configuring power profiles..."
+
+if systemctl is-enabled --quiet power-profiles-daemon.service; then
+    echo "power-profiles-daemon is already enabled."
+else
+    echo "Enabling power-profiles-daemon..."
+    sudo systemctl enable power-profiles-daemon.service
+fi
