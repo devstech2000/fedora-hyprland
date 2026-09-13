@@ -1,0 +1,29 @@
+# Secrets / credentials
+.env
+.env.*
+*.key
+*.pem
+*.token
+*credentials*
+*secret*
+
+# SSH / GPG
+.ssh/
+.gnupg/
+
+# Temporary / editor files
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+
+# Logs
+*.log
+
+# Caches
+.cache/
+
+# OS metadata
+.DS_Store
+Thumbs.db
