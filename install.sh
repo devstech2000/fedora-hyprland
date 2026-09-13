@@ -29,3 +29,28 @@ echo "Fedora 44 detected."
 echo "Repository: $REPO_DIR"
 echo "User: $USER"
 echo "Home: $HOME"
+
+echo
+echo "==> Installing DNF COPR support..."
+sudo dnf install -y dnf5-plugins
+
+echo
+echo "==> Enabling COPR repositories..."
+
+mapfile -t COPRS < <(
+    grep -Ev '^[[:space:]]*(#|$)' "$REPO_DIR/packages/copr.txt"
+)
+
+for copr in "${COPRS[@]}"; do
+    echo "Enabling COPR: $copr"
+    sudo dnf copr enable -y "$copr"
+done
+
+echo
+echo "==> Installing DNF packages..."
+
+mapfile -t DNF_PACKAGES < <(
+    grep -Ev '^[[:space:]]*(#|$)' "$REPO_DIR/packages/dnf.txt"
+)
+
+sudo dnf install -y "${DNF_PACKAGES[@]}"
