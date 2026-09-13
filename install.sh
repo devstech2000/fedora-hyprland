@@ -189,3 +189,17 @@ else
 
     rm -f "$WALLPAPER_TMP"
 fi
+
+echo
+echo "==> Installing user configuration..."
+
+mkdir -p "$HOME/.config"
+
+for config_dir in "$REPO_DIR"/config/*; do
+    config_name="$(basename "$config_dir")"
+
+    echo "Installing config: $config_name"
+
+    mkdir -p "$HOME/.config/$config_name"
+    cp -a "$config_dir/." "$HOME/.config/$config_name/"
+done
