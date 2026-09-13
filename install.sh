@@ -244,3 +244,26 @@ for service in "${USER_SERVICES[@]}"; do
     echo "Enabling user service: $service"
     systemctl --user enable "$service"
 done
+
+echo
+echo "==> Configuring TTY1 autologin..."
+
+TTY1_OVERRIDE_DIR="/etc/systemd/system/getty@tty1.service.d"
+TTY1_TEMPLATE="$REPO_DIR/systemd/system/getty@tty1.service.d/override.conf.template"
+
+TTY1_TMP="$(mktemp)"
+
+sed "s/@USER@/$(id -un)/g" \
+    "$TTY1_TEMPLATE" \
+    > "$TTY1_TMP"
+
+sudo mkdir -p "$TTY1_OVERRIDE_DIR"
+
+sudo install -m 0644 \
+    "$TTY1_TMP" \
+    "$TTY1_OVERRIDE_DIR/override.conf"
+
+rm -f "$TTY1_TMP"
+
+sudo systemctl daemon-reload
+sudo systemctl enable getty@tty1.service
