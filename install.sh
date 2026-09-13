@@ -354,6 +354,16 @@ else
 fi
 
 echo
+echo "==> Configuring default boot target..."
+
+if [[ "$(systemctl get-default)" == "multi-user.target" ]]; then
+    echo "Default boot target is already multi-user.target."
+else
+    echo "Setting default boot target: multi-user.target"
+    sudo systemctl set-default multi-user.target
+fi
+
+echo
 echo "==> Configuring Plymouth..."
 
 PLYMOUTH_THEME="catppuccin-macchiato"
