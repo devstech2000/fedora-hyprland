@@ -47,6 +47,13 @@ fd-find
 plymouth-scripts
 plymouth-plugin-two-step
 
+# Audio / Bluetooth
+pipewire
+pipewire-pulseaudio
+pipewire-alsa
+wireplumber
+bluez
+
 # Power management
 power-profiles-daemon
 
