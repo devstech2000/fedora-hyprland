@@ -20,24 +20,20 @@ PopupWindow {
 
     anchor {
         item: root.anchorItem
-        rect.x: root.anchorItem
-            ? root.anchorItem.width - root.implicitWidth
-            : 0
-        rect.y: root.anchorItem
-            ? root.anchorItem.height
-            : 0
+        rect.x: root.anchorItem ? root.anchorItem.width - root.implicitWidth : 0
+        rect.y: root.anchorItem ? root.anchorItem.height : 0
     }
 
     function open() {
-        visible = true
+        visible = true;
     }
 
     function close() {
-        visible = false
+        visible = false;
     }
 
     function toggle() {
-        visible = !visible
+        visible = !visible;
     }
 
     Rectangle {
@@ -98,21 +94,11 @@ PopupWindow {
                 }
             }
 
-            Row {
+            PowerButton {
                 width: parent.width
-                spacing: 8
-
-                PowerButton {
-                    text: "Logout"
-                    icon: "\uf08b"
-                    command: ["hyprctl", "dispatch", "exit"]
-                }
-
-                PowerButton {
-                    text: "Reboot"
-                    icon: "\uf021"
-                    command: ["systemctl", "reboot"]
-                }
+                text: "Reboot"
+                icon: "\uf021"
+                command: ["systemctl", "reboot"]
             }
 
             PowerButton {
@@ -158,8 +144,8 @@ PopupWindow {
             cursorShape: Qt.PointingHandCursor
 
             onClicked: {
-                root.close()
-                Quickshell.execDetached(parent.command)
+                root.close();
+                Quickshell.execDetached(parent.command);
             }
         }
     }
