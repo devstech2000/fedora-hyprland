@@ -1,0 +1,42 @@
+# Desktop / Hyprland
+hyprland
+hyprland-guiutils
+hypridle
+hyprlock
+hyprpaper
+hyprpolkitagent
+uwsm
+xdg-desktop-portal
+xdg-desktop-portal-hyprland
+
+# Shell / Desktop tools
+quickshell
+kitty
+fish
+rofi
+mako
+yazi
+btop
+cascadia-mono-nf-fonts
+
+# Screenshot workflow
+grim
+slurp
+jq
+
+# Development
+git
+neovim
+gcc-c++
+gdb
+cmake
+clang-devel
+qt6-qtdeclarative-devel
+ripgrep
+fd-find
+
+# Power management
+power-profiles-daemon
+
+# Application platform
+flatpak
