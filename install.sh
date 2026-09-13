@@ -203,3 +203,18 @@ for config_dir in "$REPO_DIR"/config/*; do
     mkdir -p "$HOME/.config/$config_name"
     cp -a "$config_dir/." "$HOME/.config/$config_name/"
 done
+
+echo
+echo "==> Installing desktop applications..."
+
+APPLICATION_DIR="$HOME/.local/share/applications"
+
+mkdir -p "$APPLICATION_DIR"
+
+for desktop_file in "$REPO_DIR"/applications/*.desktop; do
+    echo "Installing desktop entry: $(basename "$desktop_file")"
+
+    install -m 0644 \
+        "$desktop_file" \
+        "$APPLICATION_DIR/$(basename "$desktop_file")"
+done
