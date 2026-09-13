@@ -25,7 +25,7 @@ hl.monitor({
 local terminal = "kitty"
 local fileManager = "kitty yazi"
 local menu = "rofi -show drun"
-local browser = "flatpak run com.google.Chrome"
+local browser = "flatpak run com.google.Chrome --disable-features=AcceleratedVideoDecoder"
 
 -------------------
 ---- AUTOSTART ----
