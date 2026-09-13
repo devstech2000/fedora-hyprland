@@ -54,3 +54,26 @@ mapfile -t DNF_PACKAGES < <(
 )
 
 sudo dnf install -y "${DNF_PACKAGES[@]}"
+
+echo
+echo "==> Configuring Flathub..."
+
+flatpak remote-add --user --if-not-exists \
+    flathub \
+    https://dl.flathub.org/repo/flathub.flatpakrepo
+
+echo
+echo "==> Installing Flatpak applications..."
+
+mapfile -t FLATPAK_APPS < <(
+    grep -Ev '^[[:space:]]*(#|$)' "$REPO_DIR/packages/flatpak.txt"
+)
+
+for app in "${FLATPAK_APPS[@]}"; do
+    if flatpak list --app --columns=application | grep -Fxq "$app"; then
+        echo "Flatpak already installed: $app"
+    else
+        echo "Installing Flatpak: $app"
+        flatpak install --user -y flathub "$app"
+    fi
+done
