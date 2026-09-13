@@ -261,6 +261,32 @@ echo "==> Installing user configuration..."
 
 mkdir -p "$HOME/.config"
 
+BACKUP_DIR=""
+
+for config_dir in "$REPO_DIR"/config/*; do
+    config_name="$(basename "$config_dir")"
+    config_target="$HOME/.config/$config_name"
+
+    if [[ -e "$config_target" || -L "$config_target" ]]; then
+        if [[ ! -d "$config_target" || -L "$config_target" ]]; then
+            echo "Error: Existing config is not a regular directory: $config_target" >&2
+            exit 1
+        fi
+
+        config_changes="$(rsync -aO --checksum --dry-run --itemize-changes \
+            "$config_dir/" "$config_target/")"
+
+        if [[ -n "$config_changes" ]]; then
+            if [[ -z "$BACKUP_DIR" ]]; then
+                BACKUP_DIR="$(mktemp -d "$HOME/fedora-hyprland-backup-$(date +%Y%m%d-%H%M%S)-XXXXXX")"
+                echo "Backing up existing configuration to: $BACKUP_DIR"
+            fi
+
+            cp -a "$config_target" "$BACKUP_DIR/"
+        fi
+    fi
+done
+
 for config_dir in "$REPO_DIR"/config/*; do
     config_name="$(basename "$config_dir")"
 
