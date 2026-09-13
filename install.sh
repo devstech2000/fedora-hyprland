@@ -31,6 +31,14 @@ echo "User: $USER"
 echo "Home: $HOME"
 
 echo
+echo "==> Creating user directories..."
+
+mkdir -p \
+    "$HOME/Pictures/Screenshot" \
+    "$HOME/.local/bin" \
+    "$HOME/.local/share/applications"
+echo
+
 echo "==> Installing DNF COPR support..."
 sudo dnf install -y dnf5-plugins
 
