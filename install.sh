@@ -287,3 +287,32 @@ else
     echo "Setting Fish as login shell..."
     sudo usermod --shell "$FISH_PATH" "$(id -un)"
 fi
+
+echo
+echo "==> Configuring Plymouth..."
+
+PLYMOUTH_THEME="catppuccin-macchiato"
+PLYMOUTH_SOURCE="$REPO_DIR/assets/plymouth/$PLYMOUTH_THEME"
+PLYMOUTH_DEST="/usr/share/plymouth/themes/$PLYMOUTH_THEME"
+
+PLYMOUTH_CHANGED=false
+
+if [[ ! -d "$PLYMOUTH_DEST" ]] \
+    || ! diff -qr "$PLYMOUTH_SOURCE" "$PLYMOUTH_DEST" >/dev/null 2>&1; then
+    echo "Installing Plymouth theme..."
+
+    sudo mkdir -p "$PLYMOUTH_DEST"
+    sudo cp -a "$PLYMOUTH_SOURCE/." "$PLYMOUTH_DEST/"
+
+    PLYMOUTH_CHANGED=true
+fi
+
+CURRENT_PLYMOUTH_THEME="$(plymouth-set-default-theme)"
+
+if [[ "$CURRENT_PLYMOUTH_THEME" != "$PLYMOUTH_THEME" ]] \
+    || [[ "$PLYMOUTH_CHANGED" == true ]]; then
+    echo "Setting Plymouth theme: $PLYMOUTH_THEME"
+    sudo plymouth-set-default-theme "$PLYMOUTH_THEME" --rebuild-initrd
+else
+    echo "Plymouth theme already configured."
+fi
