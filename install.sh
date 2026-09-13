@@ -343,3 +343,17 @@ else
     echo "Granting btop access to CPU power information..."
     sudo setcap 'cap_perfmon,cap_dac_read_search=ep' "$BTOP_PATH"
 fi
+
+echo
+echo "==> Configuring default file manager..."
+
+CURRENT_DIRECTORY_HANDLER="$(
+    xdg-mime query default inode/directory || true
+)"
+
+if [[ "$CURRENT_DIRECTORY_HANDLER" == "yazi.desktop" ]]; then
+    echo "Yazi is already the default directory handler."
+else
+    echo "Setting Yazi as the default directory handler..."
+    xdg-mime default yazi.desktop inode/directory
+fi
