@@ -77,3 +77,37 @@ for app in "${FLATPAK_APPS[@]}"; do
         flatpak install --user -y flathub "$app"
     fi
 done
+
+echo
+echo "==> Installing Satty..."
+
+SATTY_VERSION="$(
+    grep '^version=' "$REPO_DIR/packages/satty.txt" | cut -d= -f2-
+)"
+
+SATTY_URL="$(
+    grep '^url=' "$REPO_DIR/packages/satty.txt" | cut -d= -f2-
+)"
+
+SATTY_SHA256="$(
+    grep '^sha256=' "$REPO_DIR/packages/satty.txt" | cut -d= -f2-
+)"
+
+if flatpak list --app --columns=application | grep -Fxq "org.satty.Satty"; then
+    echo "Satty already installed."
+else
+    echo "Downloading Satty $SATTY_VERSION..."
+
+    SATTY_TMP_DIR="$(mktemp -d)"
+    SATTY_BUNDLE="$SATTY_TMP_DIR/satty.flatpak"
+
+    curl -L --fail --silent --show-error \
+        -o "$SATTY_BUNDLE" \
+        "$SATTY_URL"
+
+    echo "$SATTY_SHA256  $SATTY_BUNDLE" | sha256sum -c -
+
+    flatpak install --user -y --bundle "$SATTY_BUNDLE"
+
+    rm -rf "$SATTY_TMP_DIR"
+fi
