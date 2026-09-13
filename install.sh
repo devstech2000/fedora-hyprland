@@ -367,7 +367,7 @@ if [[ ! -d "$PLYMOUTH_DEST" ]] \
     echo "Installing Plymouth theme..."
 
     sudo mkdir -p "$PLYMOUTH_DEST"
-    sudo cp -a "$PLYMOUTH_SOURCE/." "$PLYMOUTH_DEST/"
+    sudo rsync -a --delete "$PLYMOUTH_SOURCE/" "$PLYMOUTH_DEST/"
 
     PLYMOUTH_CHANGED=true
 fi

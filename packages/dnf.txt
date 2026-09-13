@@ -42,6 +42,7 @@ clang-devel
 qt6-qtdeclarative-devel
 ripgrep
 fd-find
+rsync
 
 # Boot splash
 plymouth-scripts
