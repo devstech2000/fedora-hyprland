@@ -154,8 +154,10 @@ SATTY_SHA256="$(
     grep '^sha256=' "$REPO_DIR/packages/satty.txt" | cut -d= -f2-
 )"
 
-if flatpak list --app --columns=application | grep -Fxq "org.satty.Satty"; then
-    echo "Satty already installed."
+SATTY_REF="$(flatpak info --user --show-ref org.satty.Satty 2>/dev/null || true)"
+
+if [[ "$SATTY_REF" == "app/org.satty.Satty/$ARCH/$SATTY_VERSION" ]]; then
+    echo "Satty $SATTY_VERSION already installed."
 else
     echo "Downloading Satty $SATTY_VERSION..."
 
@@ -169,7 +171,8 @@ else
 
     echo "$SATTY_SHA256  $SATTY_BUNDLE" | sha256sum -c -
 
-    flatpak install --user -y --bundle "$SATTY_BUNDLE"
+    flatpak install --user -y --or-update --bundle "$SATTY_BUNDLE"
+    flatpak make-current --user org.satty.Satty "$SATTY_VERSION"
 
 fi
 
