@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+geometry="$(
+    hyprctl clients -j \
+        | jq -r '.[] | select(.mapped == true) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' \
+        | slurp
+)" || exit 0
+
+[ -n "$geometry" ] || exit 0
+
+grim -g "$geometry" - | flatpak run org.satty.Satty \
+    --filename - \
+    --output-filename "$HOME/Pictures/Screenshot/Screenshot_%Y-%m-%d_%H-%M-%S.png" \
+    --early-exit all
