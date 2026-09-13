@@ -53,10 +53,12 @@ pipewire
 pipewire-pulseaudio
 pipewire-alsa
 wireplumber
+playerctl
 bluez
 
 # Power management
 power-profiles-daemon
+brightnessctl
 
 # Application platform
 flatpak
