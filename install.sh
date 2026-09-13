@@ -193,8 +193,10 @@ STYLUA_SHA256="$(
 
 mkdir -p "$HOME/.local/bin"
 
-if command -v stylua >/dev/null 2>&1 \
-    && [[ "$(stylua --version)" == "stylua $STYLUA_VERSION" ]]; then
+STYLUA_PATH="$HOME/.local/bin/stylua"
+
+if [[ -x "$STYLUA_PATH" ]] \
+    && [[ "$("$STYLUA_PATH" --version)" == "stylua $STYLUA_VERSION" ]]; then
     echo "StyLua $STYLUA_VERSION already installed."
 else
     echo "Downloading StyLua $STYLUA_VERSION..."
@@ -213,7 +215,7 @@ else
 
     install -m 0755 \
         "$STYLUA_TMP_DIR/stylua" \
-        "$HOME/.local/bin/stylua"
+        "$STYLUA_PATH"
 
 fi
 
