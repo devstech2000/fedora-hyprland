@@ -152,3 +152,40 @@ else
 
     rm -rf "$STYLUA_TMP_DIR"
 fi
+
+echo
+echo "==> Installing wallpaper..."
+
+WALLPAPER_URL="$(
+    grep '^url=' "$REPO_DIR/assets/wallpaper.txt" | cut -d= -f2-
+)"
+
+WALLPAPER_SHA256="$(
+    grep '^sha256=' "$REPO_DIR/assets/wallpaper.txt" | cut -d= -f2-
+)"
+
+WALLPAPER_DIR="$HOME/.local/share/fedora-hyprland/wallpapers"
+WALLPAPER_PATH="$WALLPAPER_DIR/wallhaven-lydwyy.jpg"
+
+mkdir -p "$WALLPAPER_DIR"
+
+if [[ -f "$WALLPAPER_PATH" ]] \
+    && echo "$WALLPAPER_SHA256  $WALLPAPER_PATH" | sha256sum -c --status; then
+    echo "Wallpaper already installed."
+else
+    echo "Downloading wallpaper..."
+
+    WALLPAPER_TMP="$(mktemp)"
+
+    curl -L --fail --silent --show-error \
+        -o "$WALLPAPER_TMP" \
+        "$WALLPAPER_URL"
+
+    echo "$WALLPAPER_SHA256  $WALLPAPER_TMP" | sha256sum -c -
+
+    install -m 0644 \
+        "$WALLPAPER_TMP" \
+        "$WALLPAPER_PATH"
+
+    rm -f "$WALLPAPER_TMP"
+fi
