@@ -4,19 +4,26 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-	output = "DP-1",
+	output = "desc:LG Electronics LG ULTRAFINE",
 	mode = "3840x2160@60",
 	position = "auto",
 	scale = "1.5",
 })
 
 hl.monitor({
-	output = "HDMI-A-2",
+	output = "desc:GWD ARZOPA",
 	mode = "2560x1600@60",
 	position = "auto-center-down",
 	scale = "1.6",
 })
 
+-- Fallback for unknown monitors and laptop displays
+hl.monitor({
+	output = "",
+	mode = "preferred",
+	position = "auto",
+	scale = "auto",
+})
 ---------------------
 ---- MY PROGRAMS ----
 ---------------------
