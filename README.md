@@ -55,7 +55,7 @@ The installer intentionally refuses to run as root.
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/devstech2000/fedora-hyprland.git
 cd fedora-hyprland
 ```
 
