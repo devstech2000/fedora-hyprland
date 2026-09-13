@@ -30,6 +30,8 @@ jq
 
 # Development
 git
+curl
+unzip
 neovim
 gcc-c++
 gdb
