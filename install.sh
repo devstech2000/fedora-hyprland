@@ -20,6 +20,13 @@ if [[ ${ID:-} != "fedora" || ${VERSION_ID:-} != "44" ]]; then
     exit 1
 fi
 
+ARCH="$(uname -m)"
+
+if [[ "$ARCH" != "x86_64" ]]; then
+    echo "Error: This installer currently supports x86_64 systems only."
+    exit 1
+fi
+
 REPO_DIR="$(
     cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
     pwd
