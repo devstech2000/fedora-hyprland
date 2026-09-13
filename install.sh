@@ -27,6 +27,8 @@ if [[ "$ARCH" != "x86_64" ]]; then
     exit 1
 fi
 
+INSTALL_USER="$(id -un)"
+
 REPO_DIR="$(
     cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
     pwd
@@ -34,7 +36,7 @@ REPO_DIR="$(
 
 echo "Fedora 44 detected."
 echo "Repository: $REPO_DIR"
-echo "User: $USER"
+echo "User: $INSTALL_USER"
 echo "Home: $HOME"
 
 echo
@@ -268,7 +270,7 @@ TTY1_TEMPLATE="$REPO_DIR/systemd/system/getty@tty1.service.d/override.conf.templ
 
 TTY1_TMP="$(mktemp)"
 
-sed "s/@USER@/$(id -un)/g" \
+sed "s/@USER@/$INSTALL_USER/g" \
     "$TTY1_TEMPLATE" \
     > "$TTY1_TMP"
 
@@ -288,7 +290,7 @@ echo "==> Configuring login shell..."
 
 FISH_PATH="$(command -v fish)"
 CURRENT_SHELL="$(
-    getent passwd "$(id -un)" | cut -d: -f7
+     getent passwd "$INSTALL_USER" | cut -d: -f7
 )"
 
 if ! grep -Fxq "$FISH_PATH" /etc/shells; then
@@ -300,7 +302,7 @@ if [[ "$CURRENT_SHELL" == "$FISH_PATH" ]]; then
     echo "Fish is already the login shell."
 else
     echo "Setting Fish as login shell..."
-    sudo usermod --shell "$FISH_PATH" "$(id -un)"
+    sudo usermod --shell "$FISH_PATH" "$INSTALL_USER"
 fi
 
 echo
