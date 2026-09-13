@@ -111,3 +111,44 @@ else
 
     rm -rf "$SATTY_TMP_DIR"
 fi
+
+echo
+echo "==> Installing StyLua..."
+
+STYLUA_VERSION="$(
+    grep '^version=' "$REPO_DIR/packages/stylua.txt" | cut -d= -f2-
+)"
+
+STYLUA_URL="$(
+    grep '^url=' "$REPO_DIR/packages/stylua.txt" | cut -d= -f2-
+)"
+
+STYLUA_SHA256="$(
+    grep '^sha256=' "$REPO_DIR/packages/stylua.txt" | cut -d= -f2-
+)"
+
+mkdir -p "$HOME/.local/bin"
+
+if command -v stylua >/dev/null 2>&1 \
+    && [[ "$(stylua --version)" == "stylua $STYLUA_VERSION" ]]; then
+    echo "StyLua $STYLUA_VERSION already installed."
+else
+    echo "Downloading StyLua $STYLUA_VERSION..."
+
+    STYLUA_TMP_DIR="$(mktemp -d)"
+    STYLUA_ARCHIVE="$STYLUA_TMP_DIR/stylua.zip"
+
+    curl -L --fail --silent --show-error \
+        -o "$STYLUA_ARCHIVE" \
+        "$STYLUA_URL"
+
+    echo "$STYLUA_SHA256  $STYLUA_ARCHIVE" | sha256sum -c -
+
+    unzip -q "$STYLUA_ARCHIVE" -d "$STYLUA_TMP_DIR"
+
+    install -m 0755 \
+        "$STYLUA_TMP_DIR/stylua" \
+        "$HOME/.local/bin/stylua"
+
+    rm -rf "$STYLUA_TMP_DIR"
+fi
