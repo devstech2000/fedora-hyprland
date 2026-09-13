@@ -316,3 +316,13 @@ if [[ "$CURRENT_PLYMOUTH_THEME" != "$PLYMOUTH_THEME" ]] \
 else
     echo "Plymouth theme already configured."
 fi
+
+echo
+echo "==> Configuring GRUB..."
+
+if sudo grub2-editenv - list | grep -Fxq "menu_auto_hide=1"; then
+    echo "GRUB menu auto-hide already enabled."
+else
+    echo "Enabling GRUB menu auto-hide..."
+    sudo grub2-editenv - set menu_auto_hide=1
+fi
