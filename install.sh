@@ -452,3 +452,7 @@ else
     echo "Enabling Bluetooth service..."
     sudo systemctl enable bluetooth.service
 fi
+
+echo
+echo "Installation completed successfully."
+echo "Reboot to apply the new boot and desktop configuration."
