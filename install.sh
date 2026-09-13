@@ -326,3 +326,20 @@ else
     echo "Enabling GRUB menu auto-hide..."
     sudo grub2-editenv - set menu_auto_hide=1
 fi
+
+echo
+echo "==> Configuring btop CPU power monitoring..."
+
+BTOP_PATH="$(command -v btop)"
+BTOP_CAPS="cap_dac_read_search,cap_perfmon=ep"
+
+CURRENT_BTOP_CAPS="$(
+    getcap "$BTOP_PATH" | cut -d' ' -f2-
+)"
+
+if [[ "$CURRENT_BTOP_CAPS" == "$BTOP_CAPS" ]]; then
+    echo "btop capabilities already configured."
+else
+    echo "Granting btop access to CPU power information..."
+    sudo setcap 'cap_perfmon,cap_dac_read_search=ep' "$BTOP_PATH"
+fi
