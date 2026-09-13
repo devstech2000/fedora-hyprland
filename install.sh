@@ -382,3 +382,13 @@ else
     echo "Enabling power-profiles-daemon..."
     sudo systemctl enable power-profiles-daemon.service
 fi
+
+echo
+echo "==> Configuring Bluetooth..."
+
+if systemctl is-enabled --quiet bluetooth.service; then
+    echo "Bluetooth service is already enabled."
+else
+    echo "Enabling Bluetooth service..."
+    sudo systemctl enable bluetooth.service
+fi
