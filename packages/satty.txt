@@ -1,0 +1,3 @@
+version=v0.22.0
+url=https://github.com/Satty-org/Satty/releases/download/v0.22.0/satty-v0.22.0.flatpak
+sha256=58b0c3f3d00aed44427fd904646cd2af7b248e4c544c0dd867c017e51f09d6bd
