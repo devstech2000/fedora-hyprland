@@ -1,3 +1,7 @@
+# Package management
+
+dnf5-plugins
+
 # Desktop / Hyprland
 hyprland
 hyprland-guiutils
