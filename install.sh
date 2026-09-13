@@ -267,3 +267,23 @@ rm -f "$TTY1_TMP"
 
 sudo systemctl daemon-reload
 sudo systemctl enable getty@tty1.service
+
+echo
+echo "==> Configuring login shell..."
+
+FISH_PATH="$(command -v fish)"
+CURRENT_SHELL="$(
+    getent passwd "$(id -un)" | cut -d: -f7
+)"
+
+if ! grep -Fxq "$FISH_PATH" /etc/shells; then
+    echo "Error: $FISH_PATH is not listed in /etc/shells."
+    exit 1
+fi
+
+if [[ "$CURRENT_SHELL" == "$FISH_PATH" ]]; then
+    echo "Fish is already the login shell."
+else
+    echo "Setting Fish as login shell..."
+    sudo usermod --shell "$FISH_PATH" "$(id -un)"
+fi
