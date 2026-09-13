@@ -2,6 +2,18 @@
 
 set -euo pipefail
 
+TMP_PATHS=()
+
+cleanup() {
+    local path
+
+    for path in "${TMP_PATHS[@]}"; do
+        [[ -n "$path" ]] && rm -rf -- "$path"
+    done
+}
+
+trap cleanup EXIT
+
 if [[ $EUID -eq 0 ]]; then
     echo "Do not run this installer as root."
     echo "Run it as your normal user. sudo will be requested when required."
@@ -116,6 +128,7 @@ else
     echo "Downloading Satty $SATTY_VERSION..."
 
     SATTY_TMP_DIR="$(mktemp -d)"
+    TMP_PATHS+=("$SATTY_TMP_DIR")
     SATTY_BUNDLE="$SATTY_TMP_DIR/satty.flatpak"
 
     curl -L --fail --silent --show-error \
@@ -126,7 +139,6 @@ else
 
     flatpak install --user -y --bundle "$SATTY_BUNDLE"
 
-    rm -rf "$SATTY_TMP_DIR"
 fi
 
 echo
@@ -153,6 +165,7 @@ else
     echo "Downloading StyLua $STYLUA_VERSION..."
 
     STYLUA_TMP_DIR="$(mktemp -d)"
+    TMP_PATHS+=("$STYLUA_TMP_DIR")
     STYLUA_ARCHIVE="$STYLUA_TMP_DIR/stylua.zip"
 
     curl -L --fail --silent --show-error \
@@ -167,7 +180,6 @@ else
         "$STYLUA_TMP_DIR/stylua" \
         "$HOME/.local/bin/stylua"
 
-    rm -rf "$STYLUA_TMP_DIR"
 fi
 
 echo
@@ -193,6 +205,7 @@ else
     echo "Downloading wallpaper..."
 
     WALLPAPER_TMP="$(mktemp)"
+    TMP_PATHS+=("$WALLPAPER_TMP")
 
     curl -L --fail --silent --show-error \
         -o "$WALLPAPER_TMP" \
@@ -204,7 +217,6 @@ else
         "$WALLPAPER_TMP" \
         "$WALLPAPER_PATH"
 
-    rm -f "$WALLPAPER_TMP"
 fi
 
 echo
@@ -269,6 +281,7 @@ TTY1_OVERRIDE_DIR="/etc/systemd/system/getty@tty1.service.d"
 TTY1_TEMPLATE="$REPO_DIR/systemd/system/getty@tty1.service.d/override.conf.template"
 
 TTY1_TMP="$(mktemp)"
+TMP_PATHS+=("$TTY1_TMP")
 
 sed "s/@USER@/$INSTALL_USER/g" \
     "$TTY1_TEMPLATE" \
@@ -279,8 +292,6 @@ sudo mkdir -p "$TTY1_OVERRIDE_DIR"
 sudo install -m 0644 \
     "$TTY1_TMP" \
     "$TTY1_OVERRIDE_DIR/override.conf"
-
-rm -f "$TTY1_TMP"
 
 sudo systemctl daemon-reload
 sudo systemctl enable getty@tty1.service
